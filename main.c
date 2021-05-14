@@ -217,11 +217,11 @@ void mine()
     //输入你要攻打的位置并判断可以用哪个来打
     save();
    while(1){
-    printf("输入你要攻打的位置，0为放弃攻击（你只能攻打你的势力临近的位置）：");
+    printf("输入你要攻打的位置，0为放弃攻击，你只能攻打你的势力临近的位置，并且不能斜着打：");
     ENEMY:
     scanf("%d",&enemy);
     if(enemy!=0)
-        printf("你可以用以下位置去攻打：");
+        printf("你可以使用以下位置的军队去攻打你刚刚选中的目标%d：\n",enemy);
     switch(enemy){
         case 0:CLEAR;
                printf("现在进入AI的回合，按任意键继续...\n");
@@ -267,8 +267,9 @@ void mine()
     }
     b[countb]=-1;
     if(b[0]==-1){
-        for(i=1;i<=24;i++)printf("\b");
-        printf("你攻打不了这里，请重选:\n");
+        //这句用于覆盖enemy!=0时的输出
+        for(i=1;i<=50;i++)printf("\b");
+        printf("你攻打不了这里，请重选:                        \n");
         goto ENEMY;
     }
     flag=0;//是否合法标志
