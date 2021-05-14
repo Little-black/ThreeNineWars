@@ -34,6 +34,7 @@ int TIME=800;//全局变量：游戏速度
 /*6*/void fight(int att,int def);//战斗函数
 /*7*/void aiturn();//AI的回合.
 /*8*/void aithink(int character,int place);//AI的行为模式
+/*8-2*/void aithink2(int i,double j,char *team,int *people,int place);//aithink函数的内定义函数，用于优化程序结构
 /*9*/int ifdeath();//判断玩家是否死亡或胜利
 /*10*/void supply();//每回合结束自动补兵
 /*11*/void save();//存档函数（保存链表，回合数，玩家阵营）
@@ -412,133 +413,93 @@ void aithink(int character,int place)
         people[i]=p->people;
         team[i]=p->team;
     }
+    /*j越大，入侵倾向越大*/
     if(character==1)j=2;
     if(character==2)j=0.5;
     if(character==3)j=1;
     /*行为方式*/
         if(place==1){//2.4
             i=2;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=4;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==3){//2.6
             i=2;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=6;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==7){//4.8
             i=4;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=8;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==9){//6.8
             i=6;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=8;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==2){//1.3.5
             i=1;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=3;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=5;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==4){//1.5.7
             i=1;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=5;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=7;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==6){//3.5.9
             i=3;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=5;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=9;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==8){//5.7.9
             i=5;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=7;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=9;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
         if(place==5){//2.4.6.8
             i=2;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=4;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=6;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             i=8;
-            if(people[place-1]*j>=people[i-1])//人数
-                if(team[place-1]!=team[i-1])//阵营
-                    fight(place,i);
+                aithink2(i,j,team,people,place);
             return;
         }
+}
+
+/*函数8-2：用于优化函数aithink的代码结构*/
+void aithink2(int i,double j,char *team,int *people,int place){
+    if(people[place-1]*j>=people[i-1])//人数
+        if(team[place-1]!=team[i-1])//阵营
+                fight(place,i);
 }
 
 /*函数9：判断玩家是否死亡或胜利***************/
