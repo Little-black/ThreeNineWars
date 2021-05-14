@@ -31,7 +31,7 @@ int TIME=800;//全局变量：游戏速度
 /*3*/char choose();//选择玩家阵营
 /*4*/void mine();//玩家的回合.
 /*5*/int *showme();//显示玩家阵营位置.
-/*6*/void fight(int att,int def);//战斗函数
+/*6*/void fight(int att,int def);//战斗或增援函数
 /*7*/void aiturn();//AI的回合.
 /*8*/void aithink(int character,int place);//AI的行为模式
 /*8-2*/void aithink2(int i,double j,char *team,int *people,int place);//aithink函数的内定义函数，用于优化程序结构
@@ -218,16 +218,18 @@ void mine()
     //输入你要攻打的位置并判断可以用哪个来打
     save();
    while(1){
-    printf("输入你要攻打的位置，0为放弃攻击，你只能攻打你的势力临近的位置，并且不能斜着打：");
+    printf("\n请输入你要攻打的位置，0为放弃攻击，你只能攻打你的阵营上下左右临近的位置。若输入自己阵营的位置则为增援：");
     ENEMY:
     scanf("%d",&enemy);
     if(enemy!=0)
-        printf("你可以使用以下位置的军队去攻打你刚刚选中的目标%d：\n",enemy);
+        printf("你可以使用以下位置的军队去攻打或增援你刚刚选中的目标：");
     switch(enemy){
+        //放弃进攻
         case 0:CLEAR;
                printf("现在进入AI的回合，按任意键继续...\n");
                getch();
                return;
+        //2和4能攻打1
         case 1:for(count=0;a[count]!=-1;count++)
                  if(a[count]==2||a[count]==4)
                     b[countb++]=a[count],printf("%d ",a[count]);
@@ -269,8 +271,8 @@ void mine()
     b[countb]=-1;
     if(b[0]==-1){
         //这句用于覆盖enemy!=0时的输出
-        for(i=1;i<=50;i++)printf("\b");
-        printf("你攻打不了这里，请重选:                        \n");
+        for(i=1;i<=100;i++)printf("\b \b");
+        printf("你无法攻打或增援这里，请重选:\n");
         goto ENEMY;
     }
     flag=0;//是否合法标志
@@ -285,7 +287,7 @@ void mine()
         if(flag==0)printf("该位置不合法！\n");
     }while(flag!=1);
     CLEAR;
-    printf("派遣成功！现在%d攻打%d\n",myarmy,enemy);
+    printf("%d前往%d的军队派遣成功！\n",myarmy,enemy);
     fight(myarmy,enemy);//开打开打
     //更新阵营位置
     count=0;
@@ -296,7 +298,7 @@ void mine()
     }
     a[count]=-1;
     countb=0;
-   }
+   }//循环结束
 }
 
 /*函数5：显示玩家阵营位置*********************/
@@ -318,7 +320,7 @@ int *showme()
     return a;
 }
 
-/*函数6：战斗函数*********************/
+/*函数6：战斗或增援函数*********************/
 void fight(int att,int def)
 {
     int app;//攻方人数
@@ -328,11 +330,12 @@ void fight(int att,int def)
     char ateam;//a的阵营
     char bteam;//b的阵营
     int judge;//用来判断是玩家进攻还是电脑进攻
+    int temp;//用于确定增援人数
     judge=0;
     //给攻方赋值
-    for(p=entry;p->place!=att;p=p->next);
+    for(p=entry;p->place!=att;p=p->next);//定位攻方
     app=p->people;
-    if(app==0)return;
+    if(app==0)return;//判断是否攻击失败
     acha=p->character;
     ateam=p->team;
     //给防守方赋值
@@ -342,42 +345,60 @@ void fight(int att,int def)
     bteam=p->team;
     //判断是谁发起的进攻，电脑还是玩家
     if(ateam==me)judge=-1;
+    //判断是否是增援
+    if(ateam==bteam){
+        printf("%d(%c)派军增援了%d(%c)\n",att,ateam,def,bteam);
+        temp = app/2;
+        app = app-temp;
+        fpp = fpp+temp;
+        p->people = fpp;
+        for(p=entry;p->place!=att;p=p->next);
+        p->people = app;
+        printf("增援完成，增援人数为%d人！",temp);
+    }
     //开始战斗
-    while(app>0&&fpp>0){
-        //攻方攻击
-        fpp-=app/10+1;
-        if(acha==1){fpp-=app/10+1;fpp-=app/10+1;}//鹰派三倍
-        if(acha==3){fpp-=app/10+1;}//复仇者两倍
-        if(fpp<=0)break;//判断是否胜利
-        //防守方反击
-        app-=fpp/10+1;
-        if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;}//鸽派三倍
-        if(bcha==3){app-=fpp/10+1;}//复仇者两倍
-    }
-    //定位失败者并修改数据
-    printf("%d(%c)攻打了%d(%c),",att,ateam,def,bteam);
-    if(app<=0){
-        p->people=fpp/2;
-        for(p=entry;p->place!=att;p=p->next);
-        p->people=fpp/2;
-        p->character=bcha;
-        p->team=bteam;
-        printf("%d(%c)胜利！\n",def,bteam);
-    }
+    else{
+        while(app>0&&fpp>0){
+            //攻方攻击
+            fpp-=app/10+1;
+            if(acha==1){fpp-=app/10+1;fpp-=app/10+1;}//鹰派三倍
+            if(acha==3){fpp-=app/10+1;}//复仇者两倍
+            if(fpp<=0)break;//判断是否攻击胜利
+            //防守方反击
+            app-=fpp/10+1;
+            if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;}//鸽派三倍
+            if(bcha==3){app-=fpp/10+1;}//复仇者两倍
+        }
+        //定位失败者并修改数据
+        printf("%d(%c)攻打了%d(%c),",att,ateam,def,bteam);
+        if(app<=0){
+            //修改防守方数据
+            p->people=fpp/2;
+            //修改攻击方数据
+            for(p=entry;p->place!=att;p=p->next);
+            p->people=fpp/2;
+            p->character=bcha;
+            p->team=bteam;
+            printf("%d(%c)胜利！\n",def,bteam);
+        }
 
-    else if(fpp<=0){
-        p->people=app/2;
-        p->character=acha;
-        p->team=ateam;
-        for(p=entry;p->place!=att;p=p->next);
-        p->people=app/2;
-        printf("%d(%c)胜利！\n",att,ateam);
+        else if(fpp<=0){
+            //修改防守方数据
+            p->people=app/2;
+            p->character=acha;
+            p->team=ateam;
+            //修改攻击方数据
+            for(p=entry;p->place!=att;p=p->next);
+            p->people=app/2;
+            printf("%d(%c)胜利！\n",att,ateam);
+        }
     }
+    //结束
     Sleep(TIME);
     if(judge==-1)
     {
-        Sleep(TIME);//玩家攻打后延长时间加倍
-        CLEAR;
+            Sleep(TIME);//玩家攻打后延长时间加倍
+            CLEAR;
     }
 }
 
