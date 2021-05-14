@@ -326,7 +326,7 @@ void fight(int att,int def)
     int bcha;//b的性格
     char ateam;//a的阵营
     char bteam;//b的阵营
-    int judge;//用来判断下面是否清屏，电脑进攻就不清
+    int judge;//用来判断是玩家进攻还是电脑进攻
     judge=0;
     //给攻方赋值
     for(p=entry;p->place!=att;p=p->next);
@@ -372,9 +372,12 @@ void fight(int att,int def)
         p->people=app/2;
         printf("%d(%c)胜利！\n",att,ateam);
     }
-    Sleep(TIME*2);
+    Sleep(TIME);
     if(judge==-1)
-    {CLEAR;}
+    {
+        Sleep(TIME);//玩家攻打后延长时间加倍
+        CLEAR;
+    }
 }
 
 /*函数7：AI的回合*********************/
