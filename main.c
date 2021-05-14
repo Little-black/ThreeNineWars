@@ -569,7 +569,11 @@ void supply()
     getch();
     system("cls");
     for(p=entry;p!=NULL;p=p->next){
-        p->people += p->people * (100-p->people)/100 + 1;
+        if(p->people > 100){
+            p->people += 0;
+        }else{
+            p->people += p->people * (100-p->people)/100 + 1;
+        }
         /*if(p->team==me)//作弊
             p->people+=100;*/
     }
