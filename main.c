@@ -1,97 +1,98 @@
 /***********************************************
-»¹ÓĞÁ½¸öbug£º
-1.aiµÄĞĞ¶¯ÓĞÊ±ºò»¹Ã»½áÊø¾Í»áÇåÆÁ
-2.ai×Ô¼º´ò×Ô¼º
+è¿˜æœ‰ä¸¤ä¸ªbugï¼š
+1.aiçš„è¡ŒåŠ¨æœ‰æ—¶å€™è¿˜æ²¡ç»“æŸå°±ä¼šæ¸…å±
+2.aiè‡ªå·±æ‰“è‡ªå·±
 ***********************************************/
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include<windows.h>
 #include<conio.h>
-#define CLEAR system("cls");start();showme()//ÇåÆÁ²¢Êä³ö±ØÒªĞÅÏ¢
+#define CLEAR system("cls");start();showme()//æ¸…å±å¹¶è¾“å‡ºå¿…è¦ä¿¡æ¯
 
-/*»ù±¾µ¥Î»½á¹¹member***********************************/
+/*åŸºæœ¬å•ä½ç»“æ„member***********************************/
 typedef struct member{
-    int place;//µØµã1-9
-    int character;//ĞÔ¸ñ1.2.3:Ó¥¸ë¸´
-    int people;//ÈËÊı
-    int attack;//¹¥»÷Á¦(¶¯Ì¬µÄ)
-    char team;//ÕóÓªabcdefghi(¸Ä³ÉÁË´óĞ´)
+    int place;//åœ°ç‚¹1-9
+    int character;//æ€§æ ¼1.2.3:é¹°é¸½å¤
+    int people;//äººæ•°
+    int attack;//æ”»å‡»åŠ›(åŠ¨æ€çš„)
+    char team;//é˜µè¥abcdefghi(æ”¹æˆäº†å¤§å†™)
     struct member *next;
 }member;
-member *p;//È«¾Ö±äÁ¿£º²Ù×÷Ö¸Õë
-member *entry;//È«¾Ö±äÁ¿£ºÈë¿ÚÖ¸Õë
-char me;//È«¾Ö±äÁ¿£ºÍæ¼ÒÕóÓª
-int round=1;//È«¾Ö±äÁ¿£º»ØºÏÊı
-int TIME=800;//È«¾Ö±äÁ¿£ºÓÎÏ·ËÙ¶È
+member *p;//å…¨å±€å˜é‡ï¼šæ“ä½œæŒ‡é’ˆ
+member *entry;//å…¨å±€å˜é‡ï¼šå…¥å£æŒ‡é’ˆ
+char me;//å…¨å±€å˜é‡ï¼šç©å®¶é˜µè¥
+int round=1;//å…¨å±€å˜é‡ï¼šå›åˆæ•°
+int TIME=800;//å…¨å±€å˜é‡ï¼šæ¸¸æˆé€Ÿåº¦
 
-/*º¯ÊıÉùÃ÷***************************************/
-/*1*/int create(int l);//´´½¨Á´±í²¢Ëæ»ú³õÊ¼»¯
-/*2*/void start();//ÏÔÊ¾Çé¿ö
-/*3*/char choose();//Ñ¡ÔñÍæ¼ÒÕóÓª
-/*4*/void mine();//Íæ¼ÒµÄ»ØºÏ.
-/*5*/int *showme();//ÏÔÊ¾Íæ¼ÒÕóÓªÎ»ÖÃ.
-/*6*/void fight(int att,int def);//Õ½¶·»òÔöÔ®º¯Êı
-/*7*/void aiturn();//AIµÄ»ØºÏ.
-/*8*/void aithink(int character,int place);//AIµÄĞĞÎªÄ£Ê½
-/*8-2*/void aithink2(int i,double j,char *team,int *people,int place);//aithinkº¯ÊıµÄÄÚ¶¨Òåº¯Êı£¬ÓÃÓÚÓÅ»¯³ÌĞò½á¹¹
-/*9*/int ifdeath();//ÅĞ¶ÏÍæ¼ÒÊÇ·ñËÀÍö»òÊ¤Àû
-/*10*/void supply();//Ã¿»ØºÏ½áÊø×Ô¶¯²¹±ø
-/*11*/void save();//´æµµº¯Êı£¨±£´æÁ´±í£¬»ØºÏÊı£¬Íæ¼ÒÕóÓª£©
-/*12*/void load();//¶Áµµº¯Êı
+/*å‡½æ•°å£°æ˜***************************************/
+/*1*/int create(int l);//åˆ›å»ºé“¾è¡¨å¹¶éšæœºåˆå§‹åŒ–
+/*2*/void start();//æ˜¾ç¤ºæƒ…å†µ
+/*3*/char choose();//é€‰æ‹©ç©å®¶é˜µè¥
+/*4*/void mine();//ç©å®¶çš„å›åˆ.
+/*5*/int *showme();//æ˜¾ç¤ºç©å®¶é˜µè¥ä½ç½®.
+/*6*/void fight(int att,int def);//æˆ˜æ–—æˆ–å¢æ´å‡½æ•°
+/*7*/void aiturn();//AIçš„å›åˆ.
+/*8*/void aithink(int character,int place);//AIçš„è¡Œä¸ºæ¨¡å¼
+/*8-2*/void aithink2(int i,double j,char *team,int *people,int place);//aithinkå‡½æ•°çš„å†…å®šä¹‰å‡½æ•°ï¼Œç”¨äºä¼˜åŒ–ç¨‹åºç»“æ„
+/*9*/int ifdeath();//åˆ¤æ–­ç©å®¶æ˜¯å¦æ­»äº¡æˆ–èƒœåˆ©
+/*10*/void supply();//æ¯å›åˆç»“æŸè‡ªåŠ¨è¡¥å…µ
+/*11*/void save();//å­˜æ¡£å‡½æ•°ï¼ˆä¿å­˜é“¾è¡¨ï¼Œå›åˆæ•°ï¼Œç©å®¶é˜µè¥ï¼‰
+/*12*/void load();//è¯»æ¡£å‡½æ•°
 
-/*Ö÷º¯Êı*****************************************/
+/*ä¸»å‡½æ•°*****************************************/
 int main(void)
 {
-    int i=0;//ÍòÄÜµÄÁÙÊ±±äÁ¿
-	system("color 0E");//¸Ä±ä´°¿ÚÑÕÉ«
+    int i=0;//ä¸‡èƒ½çš„ä¸´æ—¶å˜é‡
+	system("color 0E");//æ”¹å˜çª—å£é¢œè‰²
+	system("chcp 65001");//æ”¹å˜æ§åˆ¶å°ç¼–ç 
 
-    //´´½¨µØÍ¼
+    //åˆ›å»ºåœ°å›¾
     do{
         if(create(i)==-1){
             start();
             goto LOAD;
         }
-        //Êä³öÏÔÊ¾
+        //è¾“å‡ºæ˜¾ç¤º
         start();
-        printf("\nÊÇ·ñÈ·ÈÏÓÃ´ËµØÍ¼£¿\n");
-        printf("1.È·ÈÏ 2.ÖØĞÂ\n");
+        printf("\næ˜¯å¦ç¡®è®¤ç”¨æ­¤åœ°å›¾ï¼Ÿ\n");
+        printf("1.ç¡®è®¤ 2.é‡æ–°\n");
         scanf("%d",&i);
-        if(i!=1)system("cls");//ÇåÆÁ
+        if(i!=1)system("cls");//æ¸…å±
     }while(i!=1);
-    //Ñ¡ÔñÎ»ÖÃ
+    //é€‰æ‹©ä½ç½®
     me=choose();
-    LOAD://¶ÁµµÎ»ÖÃ
-    /******ÕıÊ½¿ªÊ¼ÓÎÏ·*****/
+    LOAD://è¯»æ¡£ä½ç½®
+    /******æ­£å¼å¼€å§‹æ¸¸æˆ*****/
     i=0;
     do{
-        printf("\nÏÖÔÚÊÇµÚ%d»ØºÏ\n",round++);
-        //Íæ¼ÒµÄ»ØºÏ
-        if(i==0)//i=0Ê±Íæ¼ÒÃ»ÓĞËÀ
+        printf("\nç°åœ¨æ˜¯ç¬¬%då›åˆ\n",round++);
+        //ç©å®¶çš„å›åˆ
+        if(i==0)//i=0æ—¶ç©å®¶æ²¡æœ‰æ­»
         mine();
-        //AIµÄ»ØºÏ
+        //AIçš„å›åˆ
         aiturn();
-        //ÅĞ¶ÏÍæ¼ÒÊÇ·ñËÀÍö»òÊ¤Àû
+        //åˆ¤æ–­ç©å®¶æ˜¯å¦æ­»äº¡æˆ–èƒœåˆ©
         i=ifdeath();
-        supply();//²¹³äÊ¿±ø
+        supply();//è¡¥å……å£«å…µ
     }while(i!=2);
     return 0;
 }
 
-/*º¯Êı1£º´´½¨Á´±í²¢Ëæ»ú³õÊ¼»¯********************/
+/*å‡½æ•°1ï¼šåˆ›å»ºé“¾è¡¨å¹¶éšæœºåˆå§‹åŒ–********************/
 int create(int l)
 {
 
-    int place=1;//µØµã
-    //attack=people/10+1; ¹¥»÷Á¦£¨¶¯Ì¬µÄ£©
-    int team='A';//³õÊ¼ÕóÓª
-    /*¶ÁÈ¡½ø¶È*/
+    int place=1;//åœ°ç‚¹
+    //attack=people/10+1; æ”»å‡»åŠ›ï¼ˆåŠ¨æ€çš„ï¼‰
+    int team='A';//åˆå§‹é˜µè¥
+    /*è¯»å–è¿›åº¦*/
     int i;
 	int size=sizeof(member);
-	srand((unsigned)time(NULL));//Ëæ»úÊıÖÖ×Ó
+	srand((unsigned)time(NULL));//éšæœºæ•°ç§å­
 
 	while(l==0){
-        printf("ÊÇ·ñ¶ÁÈ¡½ø¶È£¿\n1.yes 2.no\n");
+        printf("æ˜¯å¦è¯»å–è¿›åº¦ï¼Ÿ\n1.yes 2.no\n");
         scanf("%d",&i);
         if(i==1){
             load();return -1;
@@ -99,7 +100,7 @@ int create(int l)
         else system("cls");
         break;
     }
-    /*Á´±í´´½¨²¢³õÊ¼»¯£¬¾Å¸öÕóÓªËæ»úĞÔ¸ñ*/
+    /*é“¾è¡¨åˆ›å»ºå¹¶åˆå§‹åŒ–ï¼Œä¹ä¸ªé˜µè¥éšæœºæ€§æ ¼*/
 
     entry=(member*)malloc(size);
     p=entry;
@@ -120,14 +121,14 @@ int create(int l)
     return 0;
 }
 
-/*º¯Êı2£ºÏÔÊ¾Çé¿ö********************/
+/*å‡½æ•°2ï¼šæ˜¾ç¤ºæƒ…å†µ********************/
 void start()
 {
     member *p2,*flag;
 	int i;
     p=p2=flag=entry;
     printf("************************************************************************\n");
-    /*Êä³ö123 456*/
+    /*è¾“å‡º123 456*/
     for(i=1;i<=2;i++){
         flag=flag->next->next->next;
         for(p=p2;p->place!=flag->place;p=p->next){
@@ -139,14 +140,14 @@ void start()
             printf("people:%d,attack:%d\t",p->people,p->people/10+1);
         printf("\n");
         for(p=p2;p->place!=flag->place;p=p->next){
-            if(p->character==1) printf("Ó¥ÅÉ  \t\t\t");
-            else if(p->character==2) printf("¸ëÅÉ  \t\t\t");
-            else if(p->character==3) printf("¸´³ğÕß\t\t\t");
+            if(p->character==1) printf("é¹°æ´¾  \t\t\t");
+            else if(p->character==2) printf("é¸½æ´¾  \t\t\t");
+            else if(p->character==3) printf("å¤ä»‡è€…\t\t\t");
         }
         printf("\n");printf("\n");
         p2=flag;
     }
-    /*Êä³ö789*/
+    /*è¾“å‡º789*/
     for(p=p2;p!=NULL;p=p->next){
         printf("%d.",p->place);
         printf("%c\t\t\t",p->team);
@@ -156,39 +157,39 @@ void start()
         printf("people:%d,attack:%d\t",p->people,p->people/10+1);
     printf("\n");
     for(p=p2;p!=NULL;p=p->next){
-        if(p->character==1) printf("Ó¥ÅÉ  \t\t\t");
-        else if(p->character==2) printf("¸ëÅÉ  \t\t\t");
-        else if(p->character==3) printf("¸´³ğÕß\t\t\t");
+        if(p->character==1) printf("é¹°æ´¾  \t\t\t");
+        else if(p->character==2) printf("é¸½æ´¾  \t\t\t");
+        else if(p->character==3) printf("å¤ä»‡è€…\t\t\t");
     }
     printf("\n");
     printf("************************************************************************\n");
 }
 
-/*º¯Êı3£ºÑ¡ÔñÍæ¼ÒÕóÓª********************/
+/*å‡½æ•°3ï¼šé€‰æ‹©ç©å®¶é˜µè¥********************/
 char choose()
 {
     char me=1;
     int i=0;
     CHOOSE:
     do{
-        printf("ÇëÑ¡ÔñÄãµÄÎ»ÖÃ£º");
+        printf("è¯·é€‰æ‹©ä½ çš„ä½ç½®ï¼š");
         scanf("%d",&me);
     }while(me<1||me>9);
-    me+='A'-1;//×ª»»³ÉÕóÓª
-    printf("ÒÔÏÂÊÇÄãµÄĞÅÏ¢£¬ÇëÈ·ÈÏ£º\n");
+    me+='A'-1;//è½¬æ¢æˆé˜µè¥
+    printf("ä»¥ä¸‹æ˜¯ä½ çš„ä¿¡æ¯ï¼Œè¯·ç¡®è®¤ï¼š\n");
     /************************************************/
     printf("***************\n");
     for(p=entry;p->team!=me;p=p->next);
     printf("%d.",p->place);
     printf("team:%c\n",p->team);
     printf("people:%d\n",p->people);
-    if(p->character==1) printf("Ó¥ÅÉ\n");
-    else if(p->character==2) printf("¸ëÅÉ\n");
-    else if(p->character==3) printf("¸´³ğ\n");
+    if(p->character==1) printf("é¹°æ´¾\n");
+    else if(p->character==2) printf("é¸½æ´¾\n");
+    else if(p->character==3) printf("å¤ä»‡\n");
     printf("***************\n");
     /************************************************/
     while(i!='1'){
-        printf("1.È·ÈÏ 2.ÖØĞÂÑ¡\n");
+        printf("1.ç¡®è®¤ 2.é‡æ–°é€‰\n");
         getchar();
         i=getchar();
         if('2'==i)goto CHOOSE;
@@ -200,36 +201,36 @@ char choose()
     return me;
 }
 
-/*º¯Êı4£ºÍæ¼ÒµÄ»ØºÏ*********************/
+/*å‡½æ•°4ï¼šç©å®¶çš„å›åˆ*********************/
 void mine()
 {
-    int *a;//´æ´¢ÄãµÄÕóÓªÎ»ÖÃ
-    int count=0;//¿ØÖÆaÊı×é
+    int *a;//å­˜å‚¨ä½ çš„é˜µè¥ä½ç½®
+    int count=0;//æ§åˆ¶aæ•°ç»„
 
-    int enemy;//ÄãÒª´òµÄµĞÈËµÄÎ»ÖÃ
+    int enemy;//ä½ è¦æ‰“çš„æ•Œäººçš„ä½ç½®
 
-    int b[5];//Äã¿ÉÒÔ¿ØÖÆÈ¥´òµÄÄã×Ô¼ºµÄÎ»ÖÃ
-    int countb=0;//¿ØÖÆbÊı×é
+    int b[5];//ä½ å¯ä»¥æ§åˆ¶å»æ‰“çš„ä½ è‡ªå·±çš„ä½ç½®
+    int countb=0;//æ§åˆ¶bæ•°ç»„
 
-    int myarmy;//Äã×îÖÕÑ¡ÔñÅÉÇ²µÄ¾ü¶Ó
-    int flag;//ÊÇ·ñºÏ·¨±êÖ¾
+    int myarmy;//ä½ æœ€ç»ˆé€‰æ‹©æ´¾é£çš„å†›é˜Ÿ
+    int flag;//æ˜¯å¦åˆæ³•æ ‡å¿—
 	int i;
-    a=showme();//ÏÔÊ¾ÄãµÄÕóÓªÎ»ÖÃ
-    //ÊäÈëÄãÒª¹¥´òµÄÎ»ÖÃ²¢ÅĞ¶Ï¿ÉÒÔÓÃÄÄ¸öÀ´´ò
+    a=showme();//æ˜¾ç¤ºä½ çš„é˜µè¥ä½ç½®
+    //è¾“å…¥ä½ è¦æ”»æ‰“çš„ä½ç½®å¹¶åˆ¤æ–­å¯ä»¥ç”¨å“ªä¸ªæ¥æ‰“
     save();
    while(1){
-    printf("\nÇëÊäÈëÄãÒª¹¥´òµÄÎ»ÖÃ£¬0Îª·ÅÆú¹¥»÷£¬ÄãÖ»ÄÜ¹¥´òÄãµÄÕóÓªÉÏÏÂ×óÓÒÁÙ½üµÄÎ»ÖÃ¡£ÈôÊäÈë×Ô¼ºÕóÓªµÄÎ»ÖÃÔòÎªÔöÔ®£º");
+    printf("\nè¯·è¾“å…¥ä½ è¦æ”»æ‰“çš„ä½ç½®ï¼Œ0ä¸ºæ”¾å¼ƒæ”»å‡»ï¼Œä½ åªèƒ½æ”»æ‰“ä½ çš„é˜µè¥ä¸Šä¸‹å·¦å³ä¸´è¿‘çš„ä½ç½®ã€‚è‹¥è¾“å…¥è‡ªå·±é˜µè¥çš„ä½ç½®åˆ™ä¸ºå¢æ´ï¼š");
     ENEMY:
     scanf("%d",&enemy);
     if(enemy!=0)
-        printf("Äã¿ÉÒÔÊ¹ÓÃÒÔÏÂÎ»ÖÃµÄ¾ü¶ÓÈ¥¹¥´ò»òÔöÔ®Äã¸Õ¸ÕÑ¡ÖĞµÄÄ¿±ê£º");
+        printf("ä½ å¯ä»¥ä½¿ç”¨ä»¥ä¸‹ä½ç½®çš„å†›é˜Ÿå»æ”»æ‰“æˆ–å¢æ´ä½ åˆšåˆšé€‰ä¸­çš„ç›®æ ‡ï¼š");
     switch(enemy){
-        //·ÅÆú½ø¹¥
+        //æ”¾å¼ƒè¿›æ”»
         case 0:CLEAR;
-               printf("ÏÖÔÚ½øÈëAIµÄ»ØºÏ£¬°´ÈÎÒâ¼ü¼ÌĞø...\n");
+               printf("ç°åœ¨è¿›å…¥AIçš„å›åˆï¼ŒæŒ‰ä»»æ„é”®ç»§ç»­...\n");
                getch();
                return;
-        //2ºÍ4ÄÜ¹¥´ò1
+        //2å’Œ4èƒ½æ”»æ‰“1
         case 1:for(count=0;a[count]!=-1;count++)
                  if(a[count]==2||a[count]==4)
                     b[countb++]=a[count],printf("%d ",a[count]);
@@ -270,26 +271,26 @@ void mine()
     }
     b[countb]=-1;
     if(b[0]==-1){
-        //Õâ¾äÓÃÓÚ¸²¸Çenemy!=0Ê±µÄÊä³ö
+        //è¿™å¥ç”¨äºè¦†ç›–enemy!=0æ—¶çš„è¾“å‡º
         for(i=1;i<=100;i++)printf("\b \b");
-        printf("ÄãÎŞ·¨¹¥´ò»òÔöÔ®ÕâÀï£¬ÇëÖØÑ¡:\n");
+        printf("ä½ æ— æ³•æ”»æ‰“æˆ–å¢æ´è¿™é‡Œï¼Œè¯·é‡é€‰:\n");
         goto ENEMY;
     }
-    flag=0;//ÊÇ·ñºÏ·¨±êÖ¾
+    flag=0;//æ˜¯å¦åˆæ³•æ ‡å¿—
     do{
-        printf("\nÑ¡ÔñÄãÒªÅÉÇ²µÄ¾ü¶Ó£¨ÊäÈëÎ»ÖÃ£©£º");
+        printf("\né€‰æ‹©ä½ è¦æ´¾é£çš„å†›é˜Ÿï¼ˆè¾“å…¥ä½ç½®ï¼‰ï¼š");
         scanf("%d",&myarmy);
         for(countb=0;b[countb]!=-1;countb++){
             if(myarmy==b[countb]){
                 flag=1;break;
             }
         }
-        if(flag==0)printf("¸ÃÎ»ÖÃ²»ºÏ·¨£¡\n");
+        if(flag==0)printf("è¯¥ä½ç½®ä¸åˆæ³•ï¼\n");
     }while(flag!=1);
     CLEAR;
-    printf("%dÇ°Íù%dµÄ¾ü¶ÓÅÉÇ²³É¹¦£¡\n",myarmy,enemy);
-    fight(myarmy,enemy);//¿ª´ò¿ª´ò
-    //¸üĞÂÕóÓªÎ»ÖÃ
+    printf("%då‰å¾€%dçš„å†›é˜Ÿæ´¾é£æˆåŠŸï¼\n",myarmy,enemy);
+    fight(myarmy,enemy);//å¼€æ‰“å¼€æ‰“
+    //æ›´æ–°é˜µè¥ä½ç½®
     count=0;
     for(p=entry;p!=NULL;p=p->next){
         if(p->team==me){
@@ -298,17 +299,17 @@ void mine()
     }
     a[count]=-1;
     countb=0;
-   }//Ñ­»·½áÊø
+   }//å¾ªç¯ç»“æŸ
 }
 
-/*º¯Êı5£ºÏÔÊ¾Íæ¼ÒÕóÓªÎ»ÖÃ*********************/
+/*å‡½æ•°5ï¼šæ˜¾ç¤ºç©å®¶é˜µè¥ä½ç½®*********************/
 int *showme()
 {
     int *a=(int *)malloc(10*sizeof(int));
     int count=0;
-    printf("ÄãµÄÕóÓª£º%c ",me);
-    printf("ÄãµÄÕóÓªÎ»ÖÃ£º");
-    //ÕÒ³öËùÓĞÎ»ÖÃÊä³ö²¢´æ´¢
+    printf("ä½ çš„é˜µè¥ï¼š%c ",me);
+    printf("ä½ çš„é˜µè¥ä½ç½®ï¼š");
+    //æ‰¾å‡ºæ‰€æœ‰ä½ç½®è¾“å‡ºå¹¶å­˜å‚¨
     for(p=entry;p!=NULL;p=p->next){
         if(p->team==me){
             printf("%d ",p->place);
@@ -320,125 +321,125 @@ int *showme()
     return a;
 }
 
-/*º¯Êı6£ºÕ½¶·»òÔöÔ®º¯Êı*********************/
+/*å‡½æ•°6ï¼šæˆ˜æ–—æˆ–å¢æ´å‡½æ•°*********************/
 void fight(int att,int def)
 {
-    int app;//¹¥·½ÈËÊı
-    int fpp;//·ÀÊØÈËÊı
-    int acha;//aµÄĞÔ¸ñ 123Ó¥¸ë¸´
-    int bcha;//bµÄĞÔ¸ñ
-    char ateam;//aµÄÕóÓª
-    char bteam;//bµÄÕóÓª
-    int judge;//ÓÃÀ´ÅĞ¶ÏÊÇÍæ¼Ò½ø¹¥»¹ÊÇµçÄÔ½ø¹¥
-    int temp;//ÓÃÓÚÈ·¶¨ÔöÔ®ÈËÊı
+    int app;//æ”»æ–¹äººæ•°
+    int fpp;//é˜²å®ˆäººæ•°
+    int acha;//açš„æ€§æ ¼ 123é¹°é¸½å¤
+    int bcha;//bçš„æ€§æ ¼
+    char ateam;//açš„é˜µè¥
+    char bteam;//bçš„é˜µè¥
+    int judge;//ç”¨æ¥åˆ¤æ–­æ˜¯ç©å®¶è¿›æ”»è¿˜æ˜¯ç”µè„‘è¿›æ”»
+    int temp;//ç”¨äºç¡®å®šå¢æ´äººæ•°
     judge=0;
-    //¸ø¹¥·½¸³Öµ
-    for(p=entry;p->place!=att;p=p->next);//¶¨Î»¹¥·½
+    //ç»™æ”»æ–¹èµ‹å€¼
+    for(p=entry;p->place!=att;p=p->next);//å®šä½æ”»æ–¹
     app=p->people;
-    if(app==0)return;//ÅĞ¶ÏÊÇ·ñ¹¥»÷Ê§°Ü
+    if(app==0)return;//åˆ¤æ–­æ˜¯å¦æ”»å‡»å¤±è´¥
     acha=p->character;
     ateam=p->team;
-    //¸ø·ÀÊØ·½¸³Öµ
+    //ç»™é˜²å®ˆæ–¹èµ‹å€¼
     for(p=entry;p->place!=def;p=p->next);
     fpp=p->people;
     bcha=p->character;
     bteam=p->team;
-    //ÅĞ¶ÏÊÇË­·¢ÆğµÄ½ø¹¥£¬µçÄÔ»¹ÊÇÍæ¼Ò
+    //åˆ¤æ–­æ˜¯è°å‘èµ·çš„è¿›æ”»ï¼Œç”µè„‘è¿˜æ˜¯ç©å®¶
     if(ateam==me)judge=-1;
-    //ÅĞ¶ÏÊÇ·ñÊÇÔöÔ®
+    //åˆ¤æ–­æ˜¯å¦æ˜¯å¢æ´
     if(ateam==bteam){
-        printf("%d(%c)ÅÉ¾üÔöÔ®ÁË%d(%c)\n",att,ateam,def,bteam);
+        printf("%d(%c)æ´¾å†›å¢æ´äº†%d(%c)\n",att,ateam,def,bteam);
         temp = app/2;
         app = app-temp;
         fpp = fpp+temp;
         p->people = fpp;
         for(p=entry;p->place!=att;p=p->next);
         p->people = app;
-        printf("ÔöÔ®Íê³É£¬ÔöÔ®ÈËÊıÎª%dÈË£¡",temp);
+        printf("å¢æ´å®Œæˆï¼Œå¢æ´äººæ•°ä¸º%däººï¼",temp);
     }
-    //¿ªÊ¼Õ½¶·
+    //å¼€å§‹æˆ˜æ–—
     else{
         while(app>0&&fpp>0){
-            //¹¥·½¹¥»÷
+            //æ”»æ–¹æ”»å‡»
             fpp-=app/10+1;
-            if(acha==1){fpp-=app/10+1;fpp-=app/10+1;}//Ó¥ÅÉÈı±¶
-            if(acha==3){fpp-=app/10+1;}//¸´³ğÕßÁ½±¶
-            if(fpp<=0)break;//ÅĞ¶ÏÊÇ·ñ¹¥»÷Ê¤Àû
-            //·ÀÊØ·½·´»÷
+            if(acha==1){fpp-=app/10+1;fpp-=app/10+1;}//é¹°æ´¾ä¸‰å€
+            if(acha==3){fpp-=app/10+1;}//å¤ä»‡è€…ä¸¤å€
+            if(fpp<=0)break;//åˆ¤æ–­æ˜¯å¦æ”»å‡»èƒœåˆ©
+            //é˜²å®ˆæ–¹åå‡»
             app-=fpp/10+1;
-            if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;}//¸ëÅÉÈı±¶
-            if(bcha==3){app-=fpp/10+1;}//¸´³ğÕßÁ½±¶
+            if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;}//é¸½æ´¾ä¸‰å€
+            if(bcha==3){app-=fpp/10+1;}//å¤ä»‡è€…ä¸¤å€
         }
-        //¶¨Î»Ê§°ÜÕß²¢ĞŞ¸ÄÊı¾İ
-        printf("%d(%c)¹¥´òÁË%d(%c),",att,ateam,def,bteam);
+        //å®šä½å¤±è´¥è€…å¹¶ä¿®æ”¹æ•°æ®
+        printf("%d(%c)æ”»æ‰“äº†%d(%c),",att,ateam,def,bteam);
         if(app<=0){
-            //ĞŞ¸Ä·ÀÊØ·½Êı¾İ
+            //ä¿®æ”¹é˜²å®ˆæ–¹æ•°æ®
             p->people=fpp/2;
-            //ĞŞ¸Ä¹¥»÷·½Êı¾İ
+            //ä¿®æ”¹æ”»å‡»æ–¹æ•°æ®
             for(p=entry;p->place!=att;p=p->next);
             p->people=fpp/2;
             p->character=bcha;
             p->team=bteam;
-            printf("%d(%c)Ê¤Àû£¡\n",def,bteam);
+            printf("%d(%c)èƒœåˆ©ï¼\n",def,bteam);
         }
 
         else if(fpp<=0){
-            //ĞŞ¸Ä·ÀÊØ·½Êı¾İ
+            //ä¿®æ”¹é˜²å®ˆæ–¹æ•°æ®
             p->people=app/2;
             p->character=acha;
             p->team=ateam;
-            //ĞŞ¸Ä¹¥»÷·½Êı¾İ
+            //ä¿®æ”¹æ”»å‡»æ–¹æ•°æ®
             for(p=entry;p->place!=att;p=p->next);
             p->people=app/2;
-            printf("%d(%c)Ê¤Àû£¡\n",att,ateam);
+            printf("%d(%c)èƒœåˆ©ï¼\n",att,ateam);
         }
     }
-    //½áÊø
+    //ç»“æŸ
     Sleep(TIME);
     if(judge==-1)
     {
-            Sleep(TIME);//Íæ¼Ò¹¥´òºóÑÓ³¤Ê±¼ä¼Ó±¶
+            Sleep(TIME);//ç©å®¶æ”»æ‰“åå»¶é•¿æ—¶é—´åŠ å€
             CLEAR;
     }
 }
 
-/*º¯Êı7£ºAIµÄ»ØºÏ*********************/
+/*å‡½æ•°7ï¼šAIçš„å›åˆ*********************/
 void aiturn()
 {
-    member *p2;//²Ù×÷Ö¸Õë£¬±ÜÃâÓëpÖØ¸´
+    member *p2;//æ“ä½œæŒ‡é’ˆï¼Œé¿å…ä¸pé‡å¤
     printf("**********************\n");
-    printf("ÏÖÔÚÊÇAIµÄĞĞ¶¯Ê±¼ä...\n");
+    printf("ç°åœ¨æ˜¯AIçš„è¡ŒåŠ¨æ—¶é—´...\n");
     printf("**********************\n");
     for(p2=entry;p2!=NULL;p2=p2->next){
-        if(p2->team==me)continue;//Ìø¹ıÍæ¼ÒÕóÓª
-        //ÅĞ¶Ï¿É¹¥´òÎ»ÖÃÓëÊÇ·ñ¹¥´ò
+        if(p2->team==me)continue;//è·³è¿‡ç©å®¶é˜µè¥
+        //åˆ¤æ–­å¯æ”»æ‰“ä½ç½®ä¸æ˜¯å¦æ”»æ‰“
         aithink(p2->character,p2->place);
-        printf("µÚ%d¸öai½áÊøÁË\n",p2->place);
+        printf("ç¬¬%dä¸ªaiç»“æŸäº†\n",p2->place);
         printf("**********************\n");
         Sleep(TIME);
     }
-    printf("µ±Ç°ĞÎÊÆ£º\n");
+    printf("å½“å‰å½¢åŠ¿ï¼š\n");
     start();
 
 }
 
-/*º¯Êı8£ºAIµÄĞĞÎªÄ£Ê½*********************/
+/*å‡½æ•°8ï¼šAIçš„è¡Œä¸ºæ¨¡å¼*********************/
 void aithink(int character,int place)
 {
-    int people[9];//´æ´¢¸÷Î»ÖÃÈËÊı
-    char team[9];//´æ´¢¸÷Î»ÖÃÕóÓª
-    int i=0;//¿ØÖÆÑ­»·±äÁ¿
-    double j;//¿ØÖÆÈıÖÖĞÔ¸ñµÄĞĞÎª
-    /*¸³Öµ*/
+    int people[9];//å­˜å‚¨å„ä½ç½®äººæ•°
+    char team[9];//å­˜å‚¨å„ä½ç½®é˜µè¥
+    int i=0;//æ§åˆ¶å¾ªç¯å˜é‡
+    double j;//æ§åˆ¶ä¸‰ç§æ€§æ ¼çš„è¡Œä¸º
+    /*èµ‹å€¼*/
     for(p=entry;p!=NULL;p=p->next,i++){
         people[i]=p->people;
         team[i]=p->team;
     }
-    /*jÔ½´ó£¬ÈëÇÖÇãÏòÔ½´ó*/
+    /*jè¶Šå¤§ï¼Œå…¥ä¾µå€¾å‘è¶Šå¤§*/
     if(character==1)j=2;
     if(character==2)j=0.5;
     if(character==3)j=1;
-    /*ĞĞÎª·½Ê½*/
+    /*è¡Œä¸ºæ–¹å¼*/
         if(place==1){//2.4
             i=2;
                 aithink2(i,j,team,people,place);
@@ -516,66 +517,66 @@ void aithink(int character,int place)
         }
 }
 
-/*º¯Êı8-2£ºÓÃÓÚÓÅ»¯º¯ÊıaithinkµÄ´úÂë½á¹¹*/
+/*å‡½æ•°8-2ï¼šç”¨äºä¼˜åŒ–å‡½æ•°aithinkçš„ä»£ç ç»“æ„*/
 void aithink2(int i,double j,char *team,int *people,int place){
-    if(people[place-1]*j>=people[i-1])//ÈËÊı
-        if(team[place-1]!=team[i-1])//ÕóÓª
+    if(people[place-1]*j>=people[i-1])//äººæ•°
+        if(team[place-1]!=team[i-1])//é˜µè¥
                 fight(place,i);
 }
 
-/*º¯Êı9£ºÅĞ¶ÏÍæ¼ÒÊÇ·ñËÀÍö»òÊ¤Àû***************/
+/*å‡½æ•°9ï¼šåˆ¤æ–­ç©å®¶æ˜¯å¦æ­»äº¡æˆ–èƒœåˆ©***************/
 int ifdeath()
 {
     int i=0;
-    /*Ó®ÁË*/
+    /*èµ¢äº†*/
     for(p=entry;p!=NULL;p=p->next){
         if(p->team!=me){
             i=1;break;
         }
     }
     if(i==0){
-        printf("¹§Ï²Äã»ñµÃÓÎÏ·Ê¤Àû£¡\n");
-        printf("¹§Ï²Äã»ñµÃÓÎÏ·Ê¤Àû£¡\n");
-        printf("¹§Ï²Äã»ñµÃÓÎÏ·Ê¤Àû£¡\n");
+        printf("æ­å–œä½ è·å¾—æ¸¸æˆèƒœåˆ©ï¼\n");
+        printf("æ­å–œä½ è·å¾—æ¸¸æˆèƒœåˆ©ï¼\n");
+        printf("æ­å–œä½ è·å¾—æ¸¸æˆèƒœåˆ©ï¼\n");
         system("pause");
         exit(0);
     }
-    /*Ã»ËÀÒ²Ã»Ó®*/
+    /*æ²¡æ­»ä¹Ÿæ²¡èµ¢*/
     for(p=entry;p!=NULL;p=p->next){
         if(p->team==me)return 0;
     }
-    /*ËÀÁË*/
-    printf("ÄãµÄÕóÓªÃğÍöÁË...\n1.¼ÌĞø¹ÛÕ½ 2.ÍË³öÓÎÏ·\n");
+    /*æ­»äº†*/
+    printf("ä½ çš„é˜µè¥ç­äº¡äº†...\n1.ç»§ç»­è§‚æˆ˜ 2.é€€å‡ºæ¸¸æˆ\n");
     do{
         scanf("%d",&i);
     }while(i!=1&&i!=2);
-    if(i==1){TIME=200;return 1;}//¼Ó¿ìÓÎÏ·ËÙ¶È½øĞĞ¹ÛÕ½
-    if(i==2)exit(1);//Ö±½ÓÍË³öÓÎÏ·
+    if(i==1){TIME=200;return 1;}//åŠ å¿«æ¸¸æˆé€Ÿåº¦è¿›è¡Œè§‚æˆ˜
+    if(i==2)exit(1);//ç›´æ¥é€€å‡ºæ¸¸æˆ
     return 0;
 }
 
-/*º¯Êı10£ºÃ¿»ØºÏ½áÊø×Ô¶¯²¹±ø*************/
+/*å‡½æ•°10ï¼šæ¯å›åˆç»“æŸè‡ªåŠ¨è¡¥å…µ*************/
 void supply()
 {
-    printf("ÏÖÔÚ½øÈëÏÂÒ»»ØºÏ£¬°´ÈÎÒâ¼ü¼ÌĞø...\n");
+    printf("ç°åœ¨è¿›å…¥ä¸‹ä¸€å›åˆï¼ŒæŒ‰ä»»æ„é”®ç»§ç»­...\n");
     getch();
     system("cls");
     for(p=entry;p!=NULL;p=p->next){
         p->people+=p->people/5+1;
-        /*if(p->team==me)//×÷±×
+        /*if(p->team==me)//ä½œå¼Š
             p->people+=100;*/
     }
     start();
-    printf("Ã¿¸öÎ»ÖÃ²¹³ä20%%Ê¿±ø\n");
+    printf("æ¯ä¸ªä½ç½®è¡¥å……20%%å£«å…µ\n");
 
 }
 
-/*º¯Êı11£º´æµµº¯Êı£¨±£´æÁ´±í£¬»ØºÏÊı£¬Íæ¼ÒÕóÓª£©*************/
+/*å‡½æ•°11ï¼šå­˜æ¡£å‡½æ•°ï¼ˆä¿å­˜é“¾è¡¨ï¼Œå›åˆæ•°ï¼Œç©å®¶é˜µè¥ï¼‰*************/
 void save()
 {
     int i;
     FILE *fp;
-	printf("×Ô¶¯´æµµÖĞ");
+	printf("è‡ªåŠ¨å­˜æ¡£ä¸­");
     for(i=1;i<=3;i++){
         printf(".");
         Sleep(TIME/3);
@@ -583,27 +584,27 @@ void save()
     printf("\n");
 
     fp=fopen("data.txt","w");
-    if(fp==NULL)printf("File can't open!\n"),system("pause"),exit(0);//¼ì²éÎÄ¼şÊÇ·ñ´ò¿ª
+    if(fp==NULL)printf("File can't open!\n"),system("pause"),exit(0);//æ£€æŸ¥æ–‡ä»¶æ˜¯å¦æ‰“å¼€
     fprintf(fp,"%d %c\n",round,me);
     for(p=entry;p!=NULL;p=p->next){
         fprintf(fp,"%d %d %d %d %c ",p->place,p->character,p->people,p->attack,p->team);
     }
-    /*¹Ø±ÕÎÄ¼ş*/
+    /*å…³é—­æ–‡ä»¶*/
     if(fclose(fp)){
-        printf("¹Ø±ÕÊ§°Ü£¡\n");
+        printf("å…³é—­å¤±è´¥ï¼\n");
         system("pause");
         exit(1);
     }else printf("save successfully!\n");
 }
 
-/*º¯Êı12£º¶Áµµº¯Êı*************/
+/*å‡½æ•°12ï¼šè¯»æ¡£å‡½æ•°*************/
 void load()
 {
     FILE *fp2;
     int size=sizeof(member);
     int i;
     fp2=fopen("data.txt","r");
-    if(fp2==NULL){printf("¶ÁµµÊ§°Ü£¡\n");system("pause");exit(0);}
+    if(fp2==NULL){printf("è¯»æ¡£å¤±è´¥ï¼\n");system("pause");exit(0);}
     fscanf(fp2,"%d %c\n",&round,&me);
     entry=(member*)malloc(size);
     p=entry;
@@ -614,9 +615,9 @@ void load()
         else p->next=NULL;
         p=p->next;
     }
-    /*¹Ø±ÕÎÄ¼ş*/
+    /*å…³é—­æ–‡ä»¶*/
     if(fclose(fp2)){
-        printf("File can't be closed£¡\n");
+        printf("File can't be closedï¼\n");
     }
     else printf("File read successfully!\n");
     round--;
