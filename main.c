@@ -9,6 +9,7 @@
 #include<windows.h>
 #include<conio.h>
 #define CLEAR system("cls");start();showme()//清屏并输出必要信息
+
 /*基本单位结构member***********************************/
 typedef struct member{
     int place;//地点1-9
@@ -23,6 +24,7 @@ member *entry;//全局变量：入口指针
 char me;//全局变量：玩家阵营
 int round=1;//全局变量：回合数
 int TIME=800;//全局变量：游戏速度
+
 /*函数声明***************************************/
 /*1*/int create(int l);//创建链表并随机初始化
 /*2*/void start();//显示情况
@@ -36,6 +38,7 @@ int TIME=800;//全局变量：游戏速度
 /*10*/void supply();//每回合结束自动补兵
 /*11*/void save();//存档函数（保存链表，回合数，玩家阵营）
 /*12*/void load();//读档函数
+
 /*主函数*****************************************/
 int main(void)
 {
@@ -115,6 +118,7 @@ int create(int l)
     }
     return 0;
 }
+
 /*函数2：显示情况********************/
 void start()
 {
@@ -158,6 +162,7 @@ void start()
     printf("\n");
     printf("************************************************************************\n");
 }
+
 /*函数3：选择玩家阵营********************/
 char choose()
 {
@@ -193,6 +198,7 @@ char choose()
     }
     return me;
 }
+
 /*函数4：玩家的回合*********************/
 void mine()
 {
@@ -290,6 +296,7 @@ void mine()
     countb=0;
    }
 }
+
 /*函数5：显示玩家阵营位置*********************/
 int *showme()
 {
@@ -308,6 +315,7 @@ int *showme()
     printf("\n");
     return a;
 }
+
 /*函数6：战斗函数*********************/
 void fight(int att,int def)
 {
@@ -367,6 +375,7 @@ void fight(int att,int def)
     if(judge==-1)
     {CLEAR;}
 }
+
 /*函数7：AI的回合*********************/
 void aiturn()
 {
@@ -386,6 +395,7 @@ void aiturn()
     start();
 
 }
+
 /*函数8：AI的行为模式*********************/
 void aithink(int character,int place)
 {
@@ -526,6 +536,7 @@ void aithink(int character,int place)
             return;
         }
 }
+
 /*函数9：判断玩家是否死亡或胜利***************/
 int ifdeath()
 {
@@ -556,6 +567,7 @@ int ifdeath()
     if(i==2)exit(1);//直接退出游戏
     return 0;
 }
+
 /*函数10：每回合结束自动补兵*************/
 void supply()
 {
@@ -571,6 +583,7 @@ void supply()
 
     start();
 }
+
 /*函数11：存档函数（保存链表，回合数，玩家阵营）*************/
 void save()
 {
@@ -596,6 +609,7 @@ void save()
         exit(1);
     }else printf("save successfully!\n");
 }
+
 /*函数12：读档函数*************/
 void load()
 {
