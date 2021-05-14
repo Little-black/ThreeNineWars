@@ -350,7 +350,7 @@ void fight(int att,int def)
         p->people = fpp;
         for(p=entry;p->place!=att;p=p->next);
         p->people = app;
-        printf("增援完成，增援人数为%d人！",temp);
+        printf("增援完成，增援人数为%d人！\n",temp);
     }
     //开始战斗
     else{
@@ -515,6 +515,10 @@ void aithink(int character,int place)
 /*函数8-2：用于优化函数aithink的代码结构*/
 void aithink2(int i,double j,char *team,int *people,int place){
     //place：AI当前操纵，i：AI选择的目标。放在数组中时要减1
+    //临时方案修复AI能控制玩家军队的恶性bug
+    if(team[place-1]==me){
+        return;
+    }
     if(people[place-1]*j>=people[i-1]){//人数大于目标
         if(team[place-1]!=team[i-1]){//阵营不同
             fight(place,i);//打
