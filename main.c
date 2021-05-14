@@ -579,12 +579,12 @@ void supply()
     getch();
     system("cls");
     for(p=entry;p!=NULL;p=p->next){
-        p->people+=10;
+        p->people+=p->people/5+1;
         /*if(p->team==me)//作弊
             p->people+=100;*/
     }
     start();
-    printf("每个位置补充10个士兵\n");
+    printf("每个位置补充20%%士兵\n");
 
 }
 
