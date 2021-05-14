@@ -514,9 +514,17 @@ void aithink(int character,int place)
 
 /*函数8-2：用于优化函数aithink的代码结构*/
 void aithink2(int i,double j,char *team,int *people,int place){
-    if(people[place-1]*j>=people[i-1])//人数
-        if(team[place-1]!=team[i-1])//阵营
-                fight(place,i);
+    //place：AI当前操纵，i：AI选择的目标。放在数组中时要减1
+    if(people[place-1]*j>=people[i-1]){//人数大于目标
+        if(team[place-1]!=team[i-1]){//阵营不同
+            fight(place,i);//打
+        }
+    }else{//人数小于目标
+        if(team[place-1]==team[i-1]){//阵营相同
+            fight(place,i);//增援
+        }
+    }
+
 }
 
 /*函数9：判断玩家是否死亡或胜利***************/
