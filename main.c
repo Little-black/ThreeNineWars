@@ -575,14 +575,14 @@ void supply()
     printf("现在进入下一回合，按任意键继续...\n");
     getch();
     system("cls");
-    printf("每个位置补充10个士兵\n");
     for(p=entry;p!=NULL;p=p->next){
         p->people+=10;
         /*if(p->team==me)//作弊
             p->people+=100;*/
     }
-
     start();
+    printf("每个位置补充10个士兵\n");
+
 }
 
 /*函数11：存档函数（保存链表，回合数，玩家阵营）*************/
