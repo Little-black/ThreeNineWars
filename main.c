@@ -562,12 +562,12 @@ void supply()
     getch();
     system("cls");
     for(p=entry;p!=NULL;p=p->next){
-        p->people+=p->people/5+1;
+        p->people += p->people * (100-p->people)/100 + 1;
         /*if(p->team==me)//作弊
             p->people+=100;*/
     }
     start();
-    printf("每个位置补充20%%士兵\n");
+    printf("每个位置补充一定量的士兵，位置原士兵越多则新补充士兵相对越少\n");
 
 }
 
