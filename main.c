@@ -372,7 +372,7 @@ void fight(int att,int def)
         p->people=app/2;
         printf("%d(%c)Ê¤Àû£¡\n",att,ateam);
     }
-    Sleep(TIME);
+    Sleep(TIME*2);
     if(judge==-1)
     {CLEAR;}
 }
