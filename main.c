@@ -17,7 +17,7 @@ typedef struct member{
 member *p;//全局变量：操作指针
 member *entry;//全局变量：入口指针
 char me;//全局变量：玩家阵营
-int round=1;//全局变量：回合数
+int rounds=1;//全局变量：回合数
 int TIME=800;//全局变量：游戏速度
 
 /*函数声明***************************************/
@@ -61,7 +61,7 @@ int main(void)
     /******正式开始游戏*****/
     i=0;
     do{
-        printf("\n现在是第%d回合\n",round++);
+        printf("\n现在是第%d回合\n",rounds++);
         //玩家的回合
         if(i==0)//i=0时玩家没有死
         mine();
@@ -580,7 +580,7 @@ void save()
 
     fp=fopen("data.txt","w");
     if(fp==NULL)printf("File can't open!\n"),system("pause"),exit(0);//检查文件是否打开
-    fprintf(fp,"%d %c\n",round,me);
+    fprintf(fp,"%d %c\n",rounds,me);
     for(p=entry;p!=NULL;p=p->next){
         fprintf(fp,"%d %d %d %d %c ",p->place,p->character,p->people,p->attack,p->team);
     }
@@ -600,7 +600,7 @@ void load()
     int i;
     fp2=fopen("data.txt","r");
     if(fp2==NULL){printf("读档失败！\n");system("pause");exit(0);}
-    fscanf(fp2,"%d %c\n",&round,&me);
+    fscanf(fp2,"%d %c\n",&rounds,&me);
     entry=(member*)malloc(size);
     p=entry;
     for(i=1;i<=9;i++){
@@ -615,5 +615,5 @@ void load()
         printf("File can't be closed！\n");
     }
     else printf("File read successfully!\n");
-    round--;
+    rounds--;
 }
