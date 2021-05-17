@@ -41,37 +41,42 @@ int main(void)
     int i=0;//万能的临时变量
 	system("color 0E");//改变窗口颜色
 	system("chcp 65001");//改变控制台编码
-	system("cls");//清屏
-
-    //创建地图
-    do{
-        if(create(i)==-1){
+    while(1){//重新开始
+        rounds = 1;//重置回合数
+        system("cls");//清屏
+        //创建地图
+        do{
+            if(create(i)==-1){
+                start();
+                goto LOAD;
+            }
+            //输出显示
             start();
-            goto LOAD;
-        }
-        //输出显示
-        start();
-        printf("\n是否确认用此地图？\n");
-        printf("1.确认 2.重新\n");
-        scanf("%d",&i);
-        if(i!=1)system("cls");//清屏
-    }while(i!=1);
-    //选择位置
-    me=choose();
-    LOAD://读档位置
-    /******正式开始游戏*****/
-    i=0;
-    do{
-        printf("\n现在是第%d回合\n",rounds++);
-        //玩家的回合
-        if(i==0)//i=0时玩家没有死
-        mine();
-        //AI的回合
-        aiturn();
-        //判断玩家是否死亡或胜利
-        i=ifdeath();
-        supply();//补充士兵
-    }while(i!=2);
+            printf("\n是否确认用此地图？\n");
+            printf("1.确认 2.重新\n");
+            scanf("%d",&i);
+            if(i!=1)system("cls");//清屏
+        }while(i!=1);
+        //选择位置
+        me=choose();
+        LOAD://读档位置
+        /******正式开始游戏*****/
+        i=0;
+        do{
+            printf("\n现在是第%d回合\n",rounds++);
+            //玩家的回合
+            if(i==0)//i=0时玩家没有死
+            mine();
+            //AI的回合
+            aiturn();
+            //判断玩家是否死亡或胜利
+            i=ifdeath();
+            if(i!=2){
+                supply();//补充士兵
+            }
+        }while(i!=2);
+    }
+
     return 0;
 }
 
@@ -536,30 +541,35 @@ void aithink2(int i,double j,char *team,int *people,int place){
 int ifdeath()
 {
     int i=0;
-    /*赢了*/
+    /*检测到非玩家阵营，赋值i=1*/
     for(p=entry;p!=NULL;p=p->next){
         if(p->team!=me){
             i=1;break;
         }
     }
+    /*未检测到非玩家阵营，玩家胜利*/
     if(i==0){
         printf("恭喜你获得游戏胜利！\n");
         printf("恭喜你获得游戏胜利！\n");
         printf("恭喜你获得游戏胜利！\n");
-        system("pause");
-        exit(0);
+        printf("秦王扫六合,虎视何雄哉!\n1.重新开始 2.退出游戏\n");
+        do{
+            scanf("%d",&i);
+        }while(i!=1&&i!=2);
+        if(i==1){return 2;}//重新开始游戏
+        if(i==2){exit(0);}
     }
-    /*没死也没赢*/
+    /*检测到玩家阵营，说明玩家没有输，退出函数*/
     for(p=entry;p!=NULL;p=p->next){
         if(p->team==me)return 0;
     }
     /*死了*/
-    printf("你的阵营灭亡了...\n1.继续观战 2.退出游戏\n");
+    printf("你的阵营灭亡了...\n胜败乃兵家常事，大侠请重新来过！\n1.继续观战 2.重新开始\n");
     do{
         scanf("%d",&i);
     }while(i!=1&&i!=2);
     if(i==1){TIME=200;return 1;}//加快游戏速度进行观战
-    if(i==2)exit(1);//直接退出游戏
+    if(i==2){return 2;};//重新开始游戏
     return 0;
 }
 
