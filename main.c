@@ -439,10 +439,10 @@ void aithink(int character,int place)
         people[i]=p->people;
         team[i]=p->team;
     }
-    /*j越大，入侵倾向越大*/
-    if(character==1)j=2;
-    if(character==2)j=0.5;
-    if(character==3)j=1;
+    /*性格系数，123鸽鹰复，j越小，入侵倾向越大*/
+    if(character==1)j=1.5; //鸽派以多打少
+    if(character==2)j=0.7; //鹰派以少胜多
+    if(character==3)j=1;   //复仇者势均力敌
     /*行为方式*/
         if(place==1){//2.4
             i=2;
@@ -528,9 +528,9 @@ void aithink2(int i,double j,char *team,int *people,int place){
     if(team[place-1]==me){
         return;
     }
-    if(people[place-1]*j>=people[i-1]){//人数大于目标
+    if(people[place-1]*j>=people[i-1]){//己方人数乘以性格系数大于目标
         if(team[place-1]!=team[i-1]){//阵营不同
-            fight(place,i);//打
+            fight(place,i);//开打
         }
     }else{//人数小于目标
         if(team[place-1]==team[i-1]){//阵营相同
