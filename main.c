@@ -368,7 +368,7 @@ void fight(int att,int def)
             if(fpp<=0)break;//判断是否攻击胜利
             //防守方反击
             app-=fpp/10+1;
-            if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;}//鸽派三倍
+            if(bcha==2){app-=fpp/10+1;app-=fpp/10+1;app-=fpp/10+1;app-=fpp/10+1;}//鸽派五倍
             if(bcha==3){app-=fpp/10+1;}//复仇者两倍
         }
         //定位失败者并修改数据
