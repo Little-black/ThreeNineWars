@@ -41,6 +41,7 @@ int main(void)
     int i=0;//万能的临时变量
 	system("color 0E");//改变窗口颜色
 	system("chcp 65001");//改变控制台编码
+	system("cls");//清屏
 
     //创建地图
     do{
@@ -87,9 +88,9 @@ int create(int l)
 	srand((unsigned)time(NULL));//随机数种子
 
 	while(l==0){
-        printf("是否读取进度？\n1.yes 2.no\n");
+        printf("是否开始新游戏（输入数字进行选择）？\n1.是，新的征程\n2.否，旧的回忆\n");
         scanf("%d",&i);
-        if(i==1){
+        if(i==2){
             load();return -1;
         }
         else system("cls");
