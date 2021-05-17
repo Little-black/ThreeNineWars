@@ -332,7 +332,7 @@ void fight(int att,int def)
     char ateam;//a的阵营
     char bteam;//b的阵营
     int judge;//用来判断是玩家进攻还是电脑进攻
-    int temp;//用于确定增援人数
+    int temp;//用于确定人数的临时变量
     judge=0;
     //给攻方赋值
     for(p=entry;p->place!=att;p=p->next);//定位攻方
@@ -373,25 +373,28 @@ void fight(int att,int def)
         }
         //定位失败者并修改数据
         printf("%d(%c)攻打了%d(%c),",att,ateam,def,bteam);
+        //防守方胜利
         if(app<=0){
             //修改防守方数据
-            p->people=fpp/2;
-            //修改攻击方数据
+            temp=fpp/2;
+            p->people=fpp-temp;
+            //修改攻击方数据，转化为防守方阵营
             for(p=entry;p->place!=att;p=p->next);
-            p->people=fpp/2;
+            p->people=temp;
             p->character=bcha;
             p->team=bteam;
             printf("%d(%c)胜利！\n",def,bteam);
         }
-
+        //攻击方胜利
         else if(fpp<=0){
-            //修改防守方数据
-            p->people=app/2;
+            //修改防守方数据，转化为攻击方阵营
+            temp=app/2;
+            p->people=app-temp;
             p->character=acha;
             p->team=ateam;
             //修改攻击方数据
             for(p=entry;p->place!=att;p=p->next);
-            p->people=app/2;
+            p->people=temp;
             printf("%d(%c)胜利！\n",att,ateam);
         }
     }
