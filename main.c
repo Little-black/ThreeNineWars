@@ -609,17 +609,17 @@ void save()
     printf("\n");
 
     fp=fopen("data.txt","w");
-    if(fp==NULL)printf("File can't open!\n"),system("pause"),exit(0);//检查文件是否打开
+    if(fp==NULL)printf("无法保存存档文件，请检查程序目录权限!\n"),system("pause"),exit(0);//检查文件是否打开
     fprintf(fp,"%d %c\n",rounds,me);
     for(p=entry;p!=NULL;p=p->next){
         fprintf(fp,"%d %d %d %d %c ",p->place,p->character,p->people,p->attack,p->team);
     }
     /*关闭文件*/
     if(fclose(fp)){
-        printf("关闭失败！\n");
+        printf("保存进度失败，请检查存档文件是否被占用！\n");
         system("pause");
         exit(1);
-    }else printf("save successfully!\n");
+    }else printf("进度存档成功!\n");
 }
 
 /*函数12：读档函数*************/
@@ -642,8 +642,8 @@ void load()
     }
     /*关闭文件*/
     if(fclose(fp2)){
-        printf("File can't be closed！\n");
+        printf("读取进度失败，请检查存档文件是否被占用！\n");
     }
-    else printf("File read successfully!\n");
+    else printf("读取进度成功!\n");
     rounds--;
 }
