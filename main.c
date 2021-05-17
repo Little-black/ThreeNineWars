@@ -132,7 +132,7 @@ void start()
         }
         printf("\n");
         for(p=p2;p->place!=flag->place;p=p->next)
-            printf("people:%d,attack:%d\t",p->people,p->people/10+1);
+            printf("士兵数:%d,战斗力:%d\t",p->people,p->people/10+1);
         printf("\n");
         for(p=p2;p->place!=flag->place;p=p->next){
             if(p->character==1) printf("鹰派  \t\t\t");
@@ -149,7 +149,7 @@ void start()
     }
     printf("\n");
     for(p=p2;p!=NULL;p=p->next)
-        printf("people:%d,attack:%d\t",p->people,p->people/10+1);
+        printf("士兵数:%d,战斗力:%d\t",p->people,p->people/10+1);
     printf("\n");
     for(p=p2;p!=NULL;p=p->next){
         if(p->character==1) printf("鹰派  \t\t\t");
@@ -176,8 +176,8 @@ char choose()
     printf("***************\n");
     for(p=entry;p->team!=me;p=p->next);
     printf("%d.",p->place);
-    printf("team:%c\n",p->team);
-    printf("people:%d\n",p->people);
+    printf("阵营:%c\n",p->team);
+    printf("士兵数:%d\n",p->people);
     if(p->character==1) printf("鹰派\n");
     else if(p->character==2) printf("鸽派\n");
     else if(p->character==3) printf("复仇\n");
