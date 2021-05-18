@@ -441,7 +441,7 @@ void aithink(int character,int place)
     }
     /*性格系数，123鸽鹰复，j越小，入侵倾向越大*/
     if(character==1)j=1.5; //鸽派以多打少
-    if(character==2)j=0.7; //鹰派以少胜多
+    if(character==2)j=0.75; //鹰派以少胜多
     if(character==3)j=1;   //复仇者势均力敌
     /*行为方式*/
         if(place==1){//2.4
