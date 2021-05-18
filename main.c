@@ -43,6 +43,7 @@ int main(void)
 	system("chcp 65001");//改变控制台编码
     while(1){//重新开始
         rounds = 1;//重置回合数
+        TIME=800;//重置游戏速度
         system("cls");//清屏
         //创建地图
         do{
@@ -60,7 +61,7 @@ int main(void)
         //选择位置
         me=choose();
         LOAD://读档位置
-        /******正式开始游戏*****/
+        /******正式开始游戏循环*****/
         i=0;
         do{
             printf("\n现在是第%d回合\n",rounds++);
@@ -419,7 +420,7 @@ void aiturn()
         //判断可攻打位置与是否攻打
         aithink(p2->character,p2->place);
         printf("第%d个ai结束了\n",p2->place);
-        printf("**********************\n");
+        printf("**************************\n");
         Sleep(TIME);
     }
     printf("当前形势：\n");
