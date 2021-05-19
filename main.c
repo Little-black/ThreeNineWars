@@ -55,9 +55,9 @@ int main(void)
             start();
             printf("\n是否确认用此地图？\n");
             printf("1.确认 2.重新\n");
-            scanf("%d",&i);
-            if(i!=1)system("cls");//清屏
-        }while(i!=1);
+            i = getch();
+            if(i!='1')system("cls");//清屏
+        }while(i!='1');
         //选择位置
         me=choose();
         LOAD://读档位置
@@ -95,8 +95,8 @@ int create(int l)
 
 	while(l==0){
         printf("是否开始新游戏（输入数字进行选择）？\n1.是，新的征程\n2.否，旧的回忆\n");
-        scanf("%d",&i);
-        if(i==2){
+        i = getch();
+        if(i=='2'){
             load();return -1;
         }
         else system("cls");
@@ -175,9 +175,10 @@ char choose()
     CHOOSE:
     do{
         printf("请选择你的位置：");
-        scanf("%d",&me);
-    }while(me<1||me>9);
-    me+='A'-1;//转换成阵营
+        me = getch();
+        printf("%c\n",me);
+    }while(me<'1'||me>'9');
+    me+='A'-'1';//转换成阵营
     printf("以下是你的信息，请确认：\n");
     /************************************************/
     printf("***************\n");
@@ -185,6 +186,7 @@ char choose()
     printf("%d.",p->place);
     printf("阵营:%c\n",p->team);
     printf("士兵数:%d\n",p->people);
+    printf("战斗力：%d\n",p->people/10+1);
     if(p->character==1) printf("鹰派\n");
     else if(p->character==2) printf("鸽派\n");
     else if(p->character==3) printf("复仇\n");
@@ -192,8 +194,7 @@ char choose()
     /************************************************/
     while(i!='1'){
         printf("1.确认 2.重新选\n");
-        getchar();
-        i=getchar();
+        i=getch();
         if('2'==i)goto CHOOSE;
         if('1'==i){
             system("cls");
@@ -223,49 +224,50 @@ void mine()
    while(1){
     printf("\n请输入你要攻打的位置，0为放弃攻击，你只能攻打你的阵营上下左右临近的位置。若输入自己阵营的位置则为增援：");
     ENEMY:
-    scanf("%d",&enemy);
-    if(enemy!=0)
+    enemy = getch();
+    printf("%c\n",enemy);
+    if(enemy!='0')
         printf("你可以使用以下位置的军队去攻打或增援你刚刚选中的目标：");
     switch(enemy){
         //放弃进攻
-        case 0:CLEAR;
+        case '0':CLEAR;
                printf("现在进入AI的回合，按任意键继续...\n");
                getch();
                return;
         //2和4能攻打1
-        case 1:for(count=0;a[count]!=-1;count++)
+        case '1':for(count=0;a[count]!=-1;count++)
                  if(a[count]==2||a[count]==4)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 2:for(count=0;a[count]!=-1;count++)
+        case '2':for(count=0;a[count]!=-1;count++)
                  if(a[count]==1||a[count]==3||a[count]==5)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 3:for(count=0;a[count]!=-1;count++)
+        case '3':for(count=0;a[count]!=-1;count++)
                  if(a[count]==2||a[count]==6)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 4:for(count=0;a[count]!=-1;count++)
+        case '4':for(count=0;a[count]!=-1;count++)
                  if(a[count]==1||a[count]==5||a[count]==7)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 5:for(count=0;a[count]!=-1;count++)
+        case '5':for(count=0;a[count]!=-1;count++)
                  if(a[count]==2||a[count]==4||a[count]==6||a[count]==8)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 6:for(count=0;a[count]!=-1;count++)
+        case '6':for(count=0;a[count]!=-1;count++)
                  if(a[count]==3||a[count]==5||a[count]==9)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 7:for(count=0;a[count]!=-1;count++)
+        case '7':for(count=0;a[count]!=-1;count++)
                  if(a[count]==4||a[count]==8)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 8:for(count=0;a[count]!=-1;count++)
+        case '8':for(count=0;a[count]!=-1;count++)
                  if(a[count]==5||a[count]==7||a[count]==9)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
-        case 9:for(count=0;a[count]!=-1;count++)
+        case '9':for(count=0;a[count]!=-1;count++)
                  if(a[count]==6||a[count]==8)
                     b[countb++]=a[count],printf("%d ",a[count]);
                 break;
@@ -281,16 +283,17 @@ void mine()
     flag=0;//是否合法标志
     do{
         printf("\n选择你要派遣的军队（输入位置）：");
-        scanf("%d",&myarmy);
+        myarmy = getch();
+        printf("%c\n",myarmy);
         for(countb=0;b[countb]!=-1;countb++){
-            if(myarmy==b[countb]){
+            if(myarmy==(b[countb]+'0')){
                 flag=1;break;
             }
         }
         if(flag==0)printf("该位置不合法！\n");
     }while(flag!=1);
     CLEAR;
-    printf("%d前往%d的军队派遣成功！\n",myarmy,enemy);
+    printf("%c前往%c的军队派遣成功！\n",myarmy,enemy);
     fight(myarmy,enemy);//开打开打
     //更新阵营位置
     count=0;
@@ -335,6 +338,11 @@ void fight(int att,int def)
     int judge;//用来判断是玩家进攻还是电脑进攻
     int temp;//用于确定人数的临时变量
     judge=0;
+    //参数类型转换(历史遗留问题，有时att、def是字符，有时是数字)
+    if(att>9&&def>9){
+        att = att-'0';
+        def = def-'0';
+    }
     //给攻方赋值
     for(p=entry;p->place!=att;p=p->next);//定位攻方
     app=p->people;
@@ -558,10 +566,10 @@ int ifdeath()
         printf("恭喜你获得游戏胜利！\n");
         printf("秦王扫六合,虎视何雄哉!\n1.重新开始 2.退出游戏\n");
         do{
-            scanf("%d",&i);
-        }while(i!=1&&i!=2);
-        if(i==1){return 2;}//重新开始游戏
-        if(i==2){exit(0);}
+            i=getch();
+        }while(i!='1'&&i!='2');
+        if(i=='1'){return 2;}//重新开始游戏
+        if(i=='2'){exit(0);}
     }
     /*检测到玩家阵营，说明玩家没有输，退出函数*/
     for(p=entry;p!=NULL;p=p->next){
@@ -570,10 +578,10 @@ int ifdeath()
     /*死了*/
     printf("你的阵营灭亡了...\n胜败乃兵家常事，大侠请重新来过！\n1.继续观战 2.重新开始\n");
     do{
-        scanf("%d",&i);
-    }while(i!=1&&i!=2);
-    if(i==1){TIME=200;return 1;}//加快游戏速度进行观战
-    if(i==2){return 2;};//重新开始游戏
+        i=getch();
+    }while(i!='1'&&i!='2');
+    if(i=='1'){TIME=200;return 1;}//加快游戏速度进行观战
+    if(i=='2'){return 2;};//重新开始游戏
     return 0;
 }
 
@@ -630,7 +638,7 @@ void load()
     int size=sizeof(member);
     int i;
     fp2=fopen("data.txt","r");
-    if(fp2==NULL){printf("读档失败！\n");system("pause");exit(0);}
+    if(fp2==NULL){printf("读档失败，没有存档文件！\n");system("pause");exit(0);}
     fscanf(fp2,"%d %c\n",&rounds,&me);
     entry=(member*)malloc(size);
     p=entry;
