@@ -209,102 +209,102 @@ void mine()
 {
     int *a;//存储你的阵营位置
     int count=0;//控制a数组
-
-    int enemy;//你要打的敌人的位置
-
-    int b[5];//你可以控制去打的你自己的位置
+    int ourarmy;//你将要行动的我军位置
+    int b[5];//你可以去打或增援的位置，最多上下左右4个，末尾加个-1
     int countb=0;//控制b数组
-
-    int myarmy;//你最终选择派遣的军队
-    int flag;//是否合法标志
+    int enemy;//你最终选择攻打的敌人
+    int flag;//目的位置是否合法标志
 	int i;
+
     a=showme();//显示你的阵营位置
-    //输入你要攻打的位置并判断可以用哪个来打
     save();
-   while(1){
-    printf("\n请输入你要攻打的位置，0为放弃攻击，你只能攻打你的阵营上下左右临近的位置。若输入自己阵营的位置则为增援：");
-    ENEMY:
-    enemy = getch();
-    printf("%c\n",enemy);
-    if(enemy!='0')
-        printf("你可以使用以下位置的军队去攻打或增援你刚刚选中的目标：");
-    switch(enemy){
-        //放弃进攻
-        case '0':CLEAR;
-               printf("现在进入AI的回合，按任意键继续...\n");
-               getch();
-               return;
-        //2和4能攻打1
-        case '1':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==2||a[count]==4)
-                    b[countb++]=a[count],printf("%d ",a[count]);
+
+    //玩家输入控制军队从哪里到哪里（from to）
+    while(1){
+        //玩家选择from
+        printf("\n请选择你要行动的军队（输入位置），输入0进入下一回合：");
+        while(1){
+            ourarmy = getch();
+            printf("%c\n",ourarmy);
+            //判断是否为0
+            if(ourarmy=='0'){break;}
+            //判断选择是否确实是自己的军队
+            for(count=0;a[count]!=-1;count++){
+                if(a[count]==ourarmy-'0'){break;}
+            }
+            //所选不是自己的军队
+            if(a[count]==-1){
+                printf("你选择的不是自己的军队，请重选：");
+                continue;
+            }else{
                 break;
-        case '2':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==1||a[count]==3||a[count]==5)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '3':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==2||a[count]==6)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '4':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==1||a[count]==5||a[count]==7)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '5':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==2||a[count]==4||a[count]==6||a[count]==8)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '6':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==3||a[count]==5||a[count]==9)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '7':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==4||a[count]==8)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '8':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==5||a[count]==7||a[count]==9)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        case '9':for(count=0;a[count]!=-1;count++)
-                 if(a[count]==6||a[count]==8)
-                    b[countb++]=a[count],printf("%d ",a[count]);
-                break;
-        default:break;
-    }
-    b[countb]=-1;
-    if(b[0]==-1){
-        //这句用于覆盖enemy!=0时的输出
-        for(i=1;i<=100;i++)printf("\b \b");
-        printf("你无法攻打或增援这里，请重选:\n");
-        goto ENEMY;
-    }
-    flag=0;//是否合法标志
-    do{
-        printf("\n选择你要派遣的军队（输入位置）：");
-        myarmy = getch();
-        printf("%c\n",myarmy);
-        for(countb=0;b[countb]!=-1;countb++){
-            if(myarmy==(b[countb]+'0')){
-                flag=1;break;
             }
         }
-        if(flag==0)printf("该位置不合法！\n");
-    }while(flag!=1);
-    CLEAR;
-    printf("%c前往%c的军队派遣成功！\n",myarmy,enemy);
-    fight(myarmy,enemy);//开打开打
-    //更新阵营位置
-    count=0;
-    for(p=entry;p!=NULL;p=p->next){
-        if(p->team==me){
-            a[count++]=p->place;
+        if(ourarmy!='0'){
+            printf("你可以攻打或增援以下位置（你选择位置临近的上下左右）：");
         }
+        //显示并存储合法的选项
+        switch(ourarmy){
+            //放弃进攻
+            case '0':CLEAR;
+                    printf("现在进入AI的回合，按任意键继续...\n");
+                    getch();
+                    return;
+            case '1':printf("2 4\n");
+                    b[countb++]=2;b[countb++]=4;
+                    break;
+            case '2':printf("1 3 5\n");
+                    b[countb++]=1;b[countb++]=3;b[countb++]=5;
+                    break;
+            case '3':printf("2 6\n");
+                    b[countb++]=2;b[countb++]=6;
+                    break;
+            case '4':printf("1 5 7\n");
+                    b[countb++]=1;b[countb++]=5;b[countb++]=7;
+                    break;
+            case '5':printf("2 4 6 8\n");
+                    b[countb++]=2;b[countb++]=4;b[countb++]=6;b[countb++]=8;
+                    break;
+            case '6':printf("3 5 9\n");
+                    b[countb++]=3;b[countb++]=5;b[countb++]=9;
+                    break;
+            case '7':printf("4 8\n");
+                    b[countb++]=4;b[countb++]=8;
+                    break;
+            case '8':printf("5 7 9\n");
+                    b[countb++]=5;b[countb++]=7;b[countb++]=9;
+                    break;
+            case '9':printf("6 8\n");
+                    b[countb++]=6;b[countb++]=8;
+                    break;
+            default:break;
+        }
+        b[countb]=-1;
+        flag=0;//目的位置是否合法
+        do{
+            printf("请选择你要攻打或增援的位置：");
+            enemy = getch();
+            printf("%c\n",enemy);
+            for(countb=0;b[countb]!=-1;countb++){
+                if(enemy==(b[countb]+'0')){
+                    flag=1;break;
+                }
+            }
+            if(flag==0){printf("该位置不合法，你只能选择攻打或增援当前军队临近上下左右的位置！\n");}
+        }while(flag!=1);
+        CLEAR;
+        printf("%c前往%c的军队派遣成功！\n",ourarmy,enemy);
+        fight(ourarmy,enemy);//开打开打
+        //更新阵营位置
+        count=0;
+        for(p=entry;p!=NULL;p=p->next){
+            if(p->team==me){
+                a[count++]=p->place;
+            }
+        }
+        a[count]=-1;
+        countb=0;
     }
-    a[count]=-1;
-    countb=0;
-   }//循环结束
 }
 
 /*函数5：显示玩家阵营位置*********************/
@@ -313,7 +313,7 @@ int *showme()
     int *a=(int *)malloc(10*sizeof(int));
     int count=0;
     printf("你的阵营：%c ",me);
-    printf("你的阵营位置：");
+    printf("你阵营的军队位置：");
     //找出所有位置输出并存储
     for(p=entry;p!=NULL;p=p->next){
         if(p->team==me){
