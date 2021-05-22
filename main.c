@@ -28,8 +28,8 @@ int TIME=800;//全局变量：游戏速度
 /*5*/int *showme();//显示玩家阵营位置.
 /*6*/void fight(int att,int def);//战斗或增援函数
 /*7*/void aiturn();//AI的回合.
-/*8*/void aithink(int character,int place);//AI的行为模式
-/*8-2*/void aithink2(int i,double j,char *team,int *people,int place);//aithink函数的内定义函数，用于优化程序结构
+/*8*/int aithink(int character,int place);//AI的行为模式
+/*8-2*/int aithink2(int i,double j,char *team,int *people,int place);//aithink函数的内定义函数，用于优化程序结构
 /*9*/int ifdeath();//判断玩家是否死亡或胜利
 /*10*/void supply();//每回合结束自动补兵
 /*11*/void save();//存档函数（保存链表，回合数，玩家阵营）
@@ -420,30 +420,57 @@ void fight(int att,int def)
 void aiturn()
 {
     member *p2;//操作指针，避免与p重复
+    int team = 'A'; //当前行动阵营
+    int expand = 1; //当前阵营是否还要行动，1是，0否
+    int temp = 0; //万能的临时变量
     printf("**********************\n");
     printf("现在是AI的行动时间...\n");
     printf("**********************\n");
-    for(p2=entry;p2!=NULL;p2=p2->next){
-        if(p2->team==me)continue;//跳过玩家阵营
-        //判断可攻打位置与是否攻打
-        aithink(p2->character,p2->place);
-        printf("第%d个ai结束了\n",p2->place);
+
+    //遍历所有阵营
+    for(team='A';team!='I'+1;team++){
+        //跳过玩家阵营
+        if(team==me){continue;}
+        //非玩家阵营开始行动
+        printf("阵营%c开始行动！\n",team);
+        //扩张欲望：true
+        expand = 1;
+        while(expand){
+            //循环结束条件：该阵营没有位置需要行动了
+            expand = 0;
+            //遍历该阵营所有的位置
+            for(p2=entry;p2!=NULL;p2=p2->next){
+                //跳过不属于当前阵营的位置
+                if(p2->team!=team){continue;}
+                //属于当前阵营的位置，AI行动
+                temp = aithink(p2->character,p2->place);
+                //当前AI某些位置有所行动
+                if(temp==1){
+                    expand = 1;
+                }
+            }
+        }
+        printf("阵营%c的回合结束了\n",team);
         printf("**************************\n");
         Sleep(TIME);
     }
+
     printf("当前形势：\n");
     start();
 
 }
 
 /*函数8：AI的行为模式*********************/
-void aithink(int character,int place)
+int aithink(int character,int place)
 {
     int people[9];//存储各位置人数
     char team[9];//存储各位置阵营
     int i=0;//控制循环变量
     double j;//控制三种性格的行为
-    /*赋值*/
+    int ifaction=0;//当前位置是否存在有效行动
+    int temp=0;//万能的临时变量
+
+    /*赋值记录所有位置的人数和阵营以供AI进行判断*/
     for(p=entry;p!=NULL;p=p->next,i++){
         people[i]=p->people;
         team[i]=p->team;
@@ -452,101 +479,128 @@ void aithink(int character,int place)
     if(character==1)j=1.5; //鸽派以多打少
     if(character==2)j=0.75; //鹰派以少胜多
     if(character==3)j=1;   //复仇者势均力敌
-    /*行为方式*/
+
+    /*行为方式：根据自身位置逐个判断临近的位置，有效行动后返回1，否则返回0*/
         if(place==1){//2.4
             i=2;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=4;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==3){//2.6
             i=2;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=6;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==7){//4.8
             i=4;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=8;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==9){//6.8
             i=6;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=8;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==2){//1.3.5
             i=1;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=3;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=5;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==4){//1.5.7
             i=1;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=5;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=7;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==6){//3.5.9
             i=3;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=5;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=9;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==8){//5.7.9
             i=5;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=7;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=9;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
         if(place==5){//2.4.6.8
             i=2;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=4;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=6;
-                aithink2(i,j,team,people,place);
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
             i=8;
-                aithink2(i,j,team,people,place);
-            return;
+                temp=aithink2(i,j,team,people,place);
+                if(temp==1){ifaction=1;}
+            return ifaction;
         }
 }
 
 /*函数8-2：用于优化函数aithink的代码结构*/
-void aithink2(int i,double j,char *team,int *people,int place){
+int aithink2(int i,double j,char *team,int *people,int place){
+    int ifaction=0;//是否有效行动
     //place：AI当前操纵，i：AI选择的目标。放在数组中时要减1
-    //临时方案修复AI能控制玩家军队的恶性bug
-    if(team[place-1]==me){
-        return;
-    }
     if(people[place-1]*j>=people[i-1]){//己方人数乘以性格系数大于目标
         if(team[place-1]!=team[i-1]){//阵营不同
             fight(place,i);//开打
+            ifaction=1;
         }
-    }else{//人数小于目标
+    }else{//己方人数小于目标
         if(team[place-1]==team[i-1]){//阵营相同
-            fight(place,i);//增援
+            if(people[place-1]>27){ //人数大于27
+                fight(place,i);//增援
+                ifaction=1;
+            }
         }
     }
-
+    //有效行动后返回1，否则返回0
+    return ifaction;
 }
 
 /*函数9：判断玩家是否死亡或胜利***************/
