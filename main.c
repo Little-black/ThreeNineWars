@@ -222,6 +222,7 @@ void mine()
     //玩家输入控制军队从哪里到哪里（from to）
     while(1){
         //玩家选择from
+        FROM:
         printf("\n请选择你要行动的军队（输入位置），输入0进入下一回合：");
         while(1){
             ourarmy = getch();
@@ -242,6 +243,7 @@ void mine()
         }
         if(ourarmy!='0'){
             printf("你可以攻打或增援以下位置（你选择位置临近的上下左右）：");
+            countb = 0;
         }
         //显示并存储合法的选项
         switch(ourarmy){
@@ -282,9 +284,13 @@ void mine()
         b[countb]=-1;
         flag=0;//目的位置是否合法
         do{
-            printf("请选择你要攻打或增援的位置：");
+            printf("请选择你要攻打或增援的位置（输入0重新选择需要行动的军队）：");
             enemy = getch();
             printf("%c\n",enemy);
+            //from位置反悔操作
+            if(enemy=='0'){
+                goto FROM;
+            }
             for(countb=0;b[countb]!=-1;countb++){
                 if(enemy==(b[countb]+'0')){
                     flag=1;break;
@@ -303,7 +309,6 @@ void mine()
             }
         }
         a[count]=-1;
-        countb=0;
     }
 }
 
