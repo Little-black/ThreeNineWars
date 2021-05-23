@@ -588,8 +588,10 @@ int aithink(int character,int place)
 }
 
 /*函数8-2：用于优化函数aithink的代码结构*/
+//team和people的类型是指针，在aithink2里修改会影响aithink里的值
 int aithink2(int i,double j,char *team,int *people,int place){
     int ifaction=0;//是否有效行动
+    int pi=0;//控制循环变量
     //place：AI当前操纵，i：AI选择的目标。放在数组中时要减1
     if(people[place-1]*j>=people[i-1]){//己方人数乘以性格系数大于目标
         if(team[place-1]!=team[i-1]){//阵营不同
@@ -603,6 +605,11 @@ int aithink2(int i,double j,char *team,int *people,int place){
                 ifaction=1;
             }
         }
+    }
+    //战斗或增援后重新赋值记录所有位置的人数和阵营以供AI进行判断
+    for(p=entry;p!=NULL;p=p->next,pi++){
+        people[pi]=p->people;
+        team[pi]=p->team;
     }
     //有效行动后返回1，否则返回0
     return ifaction;
