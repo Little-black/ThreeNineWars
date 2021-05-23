@@ -4,6 +4,7 @@
 #include<windows.h>
 #include<conio.h>
 #define CLEAR system("cls");start();showme()//清屏并输出必要信息
+#define FLUSH; while(kbhit()){flush=getch();} //清除输入缓冲区
 
 /*基本单位结构member***********************************/
 typedef struct member{
@@ -19,6 +20,8 @@ member *entry;//全局变量：入口指针
 char me;//全局变量：玩家阵营
 int rounds=1;//全局变量：回合数
 int TIME=800;//全局变量：游戏速度
+int TIME2;//全局变量：用于恢复修改后的游戏速度,它等于初始设定的TIME
+char flush;//全局变量：用于清除缓冲区
 
 /*函数声明***************************************/
 /*1*/int create(int l);//创建链表并随机初始化
@@ -39,11 +42,12 @@ int TIME=800;//全局变量：游戏速度
 int main(void)
 {
     int i=0;//万能的临时变量
+    TIME2=TIME;//备份初始游戏速度
 	system("color 0E");//改变窗口颜色
 	system("chcp 65001");//改变控制台编码
     while(1){//重新开始
         rounds = 1;//重置回合数
-        TIME=800;//重置游戏速度
+        TIME=TIME2;//重置游戏速度
         system("cls");//清屏
         //创建地图
         do{
@@ -216,6 +220,7 @@ void mine()
     int flag;//目的位置是否合法标志
 	int i;
 
+
     a=showme();//显示你的阵营位置
     save();
 
@@ -223,6 +228,7 @@ void mine()
     while(1){
         //玩家选择from
         FROM:
+        FLUSH;
         printf("\n请选择你要行动的军队（输入位置），输入0进入下一回合：");
         while(1){
             ourarmy = getch();
@@ -632,6 +638,7 @@ int ifdeath()
         printf("恭喜你获得游戏胜利！\n");
         printf("秦王扫六合,虎视何雄哉!\n1.重新开始 2.退出游戏\n");
         do{
+            FLUSH;
             i=getch();
         }while(i!='1'&&i!='2');
         if(i=='1'){return 2;}//重新开始游戏
@@ -644,9 +651,10 @@ int ifdeath()
     /*死了*/
     printf("你的阵营灭亡了...\n胜败乃兵家常事，大侠请重新来过！\n1.继续观战 2.重新开始\n");
     do{
+        FLUSH;
         i=getch();
     }while(i!='1'&&i!='2');
-    if(i=='1'){TIME=200;return 1;}//加快游戏速度进行观战
+    if(i=='1'){TIME=TIME2/4;return 1;}//加快游戏速度进行观战
     if(i=='2'){return 2;};//重新开始游戏
     return 0;
 }
@@ -655,6 +663,7 @@ int ifdeath()
 void supply()
 {
     printf("现在进入下一回合，按任意键继续...\n");
+    FLUSH;
     getch();
     system("cls");
     for(p=entry;p!=NULL;p=p->next){
@@ -679,7 +688,7 @@ void save()
 	printf("自动存档中");
     for(i=1;i<=3;i++){
         printf(".");
-        Sleep(TIME/3);
+        Sleep(TIME2/3);
     }
     printf("\n");
 
